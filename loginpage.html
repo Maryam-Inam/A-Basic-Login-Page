@@ -115,7 +115,15 @@
             .append(
               '</br> <span id="spa">Password must not be less than 6 characters.</span>'
             );
-          // alert("password less than 6");
+          return false;
+        }
+        if (/\s/.test(givenPassword)) {
+          $("#uname").addClass("error");
+          $("#uname")
+            .parent()
+            .append(
+              '</br> <span id="spa">Password must not contain spaces.</span>'
+            );
           return false;
         }
         $("#uname").removeClass("error");
