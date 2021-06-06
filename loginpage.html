@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="jquery-3.6.0.min.js"></script>
     <style>
       body {
         font-family: Arial, Helvetica, sans-serif;
@@ -46,7 +47,7 @@
       }
 
       img.avatar {
-        width: 40%;
+        width: 15%;
         border-radius: 50%;
       }
 
@@ -57,6 +58,18 @@
       span.psw {
         float: right;
         padding-top: 16px;
+      }
+      .error {
+        border: 1px solid red;
+      }
+      #spn {
+        color: red;
+      }
+      #spa {
+        color: red;
+      }
+      #spc {
+        color: red;
       }
 
       /* Change styles for span and cancel button on extra small screens */
@@ -70,11 +83,86 @@
         }
       }
     </style>
+    <script>
+      function validateForm() {
+        console.log("function running");
+        $("#uname").parent().find("#spn").remove();
+        $("#uname").parent().find("#spa").remove();
+        var bool = true;
+        if (!correctName()) {
+          bool = false;
+        }
+        if (!correctPassword()) {
+          bool = false;
+          console.log("false password");
+        }
+        // var x = document.forms["myForm"]["uname"].value;
+        // if (x == "") {
+        //   alert("Name must be filled out");
+        //   console.log("false");
+        //   return false;
+        // }
+
+        return bool;
+      }
+      function correctPassword() {
+        var givenPassword = $("#pass").val();
+        console.log("password length is: " + givenPassword.length);
+        if (givenPassword.length < 6 && givenPassword.length > 0) {
+          $("#uname").addClass("error");
+          $("#uname")
+            .parent()
+            .append(
+              '</br> <span id="spa">Password must not be less than 6 characters.</span>'
+            );
+          // alert("password less than 6");
+          return false;
+        }
+        $("#uname").removeClass("error");
+
+        return true;
+      }
+      function correctName() {
+        var wrongexp = new RegExp("[^A-Za-z]");
+        var givenName = $("#uname").val();
+        if (givenName.match(wrongexp) && !!givenName) {
+          $("#uname").addClass("error");
+          $("#uname")
+            .parent()
+            .append(
+              '<span id="spn">Name should be in upper or lower case only. Also no space allowed!</span>'
+            );
+          return false;
+        }
+        if (givenName.length > 10) {
+          $("#uname").addClass("error");
+          $("#uname")
+            .parent()
+            .append('<span id="spn">Name must not exceed 10 alphabets.</span>');
+          return false;
+        }
+        // if (!givenName) {
+        //   $("#uname").addClass("error");
+        //   $("#uname")
+        //     .parent()
+        //     .append('<span id="spn">Field can not be left empty.</span>');
+        //   return false;
+        // }
+        $("#uname").removeClass("error");
+
+        return true;
+      }
+    </script>
   </head>
   <body>
     <h2>Login Form</h2>
 
-    <form action="/action_page.php" method="post">
+    <form
+      name="myForm"
+      action="https://s1exam.herokuapp.com/"
+      method="post"
+      onsubmit="return validateForm()"
+    >
       <div class="imgcontainer">
         <img src="img_avatar2.png" alt="Avatar" class="avatar" />
       </div>
@@ -94,20 +182,17 @@
           type="password"
           placeholder="Enter Password"
           name="psw"
+          id="pass"
           required
         />
 
-        <button type="submit">Login</button>
-        <label>
-          <input type="checkbox" checked="checked" name="remember" /> Remember
-          me
-        </label>
-      </div>
-
-      <div class="container" style="background-color: #f1f1f1">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Forgot <a href="#">password?</a></span>
+        <button id="submit" type="submit">Login</button>
       </div>
     </form>
+
+    <div class="container" style="background-color: #f1f1f1">
+      <button type="button" class="cancelbtn">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
   </body>
 </html>
